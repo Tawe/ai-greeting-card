@@ -32,9 +32,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Get IP and user agent for rate limiting and creator hash
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
-               request.headers.get('x-real-ip') || 
-               request.ip ||
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+               request.headers.get('x-real-ip') ||
+               request.headers.get('cf-connecting-ip') ||
                'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
     const deviceHash = getDeviceIdentifier(ip, userAgent);

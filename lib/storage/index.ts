@@ -25,6 +25,7 @@ export async function uploadImage(
     Body: buffer,
     ContentType: contentType,
     CacheControl: 'public, max-age=31536000', // 1 year cache
+    ACL: 'public-read', // Make objects publicly readable
   });
 
   await s3Client.send(command);

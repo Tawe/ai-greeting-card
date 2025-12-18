@@ -22,5 +22,198 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Occasion-aware background with texture and vignette */
+.occasion-background {
+  position: relative;
+}
+
+.occasion-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Subtle noise/grain texture */
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+  background-size: 200% 200%, 150% 150%, 150% 150%;
+  background-position: 0% 0%, 20% 30%, 80% 70%;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.occasion-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Subtle vignette - center brighter, edges darker */
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.03) 100%);
+  pointer-events: none;
+}
+
+/* Design Guide: Smooth animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.slide-in-from-bottom-4 {
+  animation: slide-in-from-bottom 0.5s ease-out;
+}
+
+/* Card opening animation - like opening a greeting card */
+.card-container {
+  perspective: 1500px;
+  perspective-origin: center center;
+  width: 100%;
+  padding: 2rem;
+}
+
+/* Card stage - soft surface behind the card */
+.card-stage {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  animation: cardSettle 0.6s ease-out;
+}
+
+@keyframes cardSettle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cover container - holds both outside and inside covers, animates together */
+.card-cover-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform 0.8s ease-in-out, box-shadow 0.3s ease-in-out;
+  z-index: 10;
+  min-height: 300px;
+  border-radius: 16px;
+  /* Hero shadow - makes card feel precious and liftable */
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.18),
+    0 10px 20px rgba(0, 0, 0, 0.08);
+  /* No background - let the cover image show through */
+  background: transparent;
+}
+
+.card-inner:not(.opened) .card-cover-container:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.22),
+    0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-inner.opened .card-cover-container {
+  transform: rotateY(-160deg);
+}
+
+.card-inner.opened .card-cover-container:hover {
+  transform: rotateY(-160deg) translateY(-4px);
+}
+
+/* Outside cover - the front with image */
+.card-cover-outside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+  transform-origin: left center;
+  transform: rotateY(0deg);
+}
+
+/* When card is closed, ensure outside cover is visible and on top */
+.card-inner:not(.opened) .card-cover-outside {
+  z-index: 10;
+}
+
+.card-inner:not(.opened) .card-back {
+  z-index: 0;
+}
+
+/* When card is open, card-back should be on top and fully opaque */
+.card-inner.opened .card-cover-outside {
+  z-index: 1;
+}
+
+.card-inner.opened .card-back {
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Card stock background - slightly off-white for better text contrast */
+.card-back > div {
+  background: #fefefe;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.18),
+    0 10px 20px rgba(0, 0, 0, 0.08);
 }

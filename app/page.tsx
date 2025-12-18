@@ -1,63 +1,227 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import VibeSelector from '@/components/VibeSelector';
+import MessageInput from '@/components/MessageInput';
+import CardPreview from '@/components/CardPreview';
+import CardCreationStep from '@/components/CardCreationStep';
+import OccasionSelector from '@/components/OccasionSelector';
+import GenerationLoadingScreen from '@/components/GenerationLoadingScreen';
+import ErrorMessage from '@/components/ErrorMessage';
+import SuccessMessage from '@/components/SuccessMessage';
+import { Vibe } from '@/lib/types';
+import { getOrCreateDeviceId } from '@/lib/utils/device-id';
+import { getOccasionGradient, getOccasionPrimary, getOccasionPrimaryHover, getOccasionBorder } from '@/lib/occasions';
+
+interface CardData {
+  id: string;
+  slug: string;
+  occasion: string;
+  vibe: Vibe;
+  cleanMessage: string;
+  coverImageUrl: string;
+  status: string;
+}
 
 export default function Home() {
+  const [occasion, setOccasion] = useState<string>('christmas');
+  const [vibe, setVibe] = useState<Vibe | null>(null);
+  const [message, setMessage] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [card, setCard] = useState<CardData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [generationProgress, setGenerationProgress] = useState<string>('');
+
+  // Initialize device ID on mount
+  useEffect(() => {
+    getOrCreateDeviceId();
+  }, []);
+
+  const handleGenerate = async () => {
+    if (!occasion || !vibe || !message.trim()) {
+      setError('Please select an occasion, vibe, and enter a message');
+      return;
+    }
+
+    setIsGenerating(true);
+    setError(null);
+    setSuccess(null);
+    setGenerationProgress('Generating your card...');
+
+    try {
+      setGenerationProgress('Rewriting your message...');
+      const response = await fetch('/api/cards', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          occasion,
+          vibe,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        
+        // Handle different error types with user-friendly messages
+        if (response.status === 429) {
+          const resetAt = errorData.resetAt ? new Date(errorData.resetAt).toLocaleString() : 'later';
+          throw new Error(`You've reached the rate limit. Please try again ${resetAt}`);
+        }
+        
+        if (response.status === 400 && errorData.message) {
+          // Content moderation or validation errors
+          throw new Error(errorData.message);
+        }
+        
+        if (response.status === 503) {
+          throw new Error('AI service is temporarily unavailable. Please try again in a few moments.');
+        }
+        
+        throw new Error(errorData.error || errorData.message || 'Failed to generate card. Please try again.');
+      }
+
+      setGenerationProgress('Finalizing your card...');
+      const cardData = await response.json();
+      setCard(cardData);
+      setSuccess('Card generated successfully!');
+      
+      // Auto-scroll to preview
+      setTimeout(() => {
+        const previewElement = document.getElementById('card-preview');
+        previewElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    } catch (error) {
+      console.error('Error generating card:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate card. Please try again.';
+      setError(errorMessage);
+    } finally {
+      setIsGenerating(false);
+      setGenerationProgress('');
+    }
+  };
+
+  const canGenerate = occasion && vibe && message.trim().length > 0;
+  const occasionGradient = getOccasionGradient(occasion);
+  const primaryColor = getOccasionPrimary(occasion);
+  const primaryHoverColor = getOccasionPrimaryHover(occasion);
+  const borderColor = getOccasionBorder(occasion);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <div 
+      className="min-h-screen occasion-background"
+      style={{
+        background: occasionGradient,
+      }}
+    >
+      <main className="container mx-auto px-4 py-8 md:py-12 md:px-8">
+        <div className="mx-auto" style={{ maxWidth: '840px' }}>
+          {/* Loading Screen */}
+          {isGenerating && (
+            <div className="rounded-xl bg-white/95 p-8 shadow-xl backdrop-blur-sm">
+              <GenerationLoadingScreen 
+                occasion={occasion}
+                onCancel={() => {
+                  setIsGenerating(false);
+                  setGenerationProgress('');
+                }}
+              />
+            </div>
+          )}
+
+          {/* Creation Form */}
+          {!isGenerating && !card && (
+            <div className="rounded-xl bg-white/95 p-4 md:p-6 shadow-xl backdrop-blur-sm">
+              <div className="space-y-4 md:space-y-6">
+                {/* Step 1: Occasion */}
+                <CardCreationStep
+                  title="Choose Your Occasion"
+                  subtitle="Select the holiday for your card"
+                  stepNumber={1}
+                  totalSteps={3}
+                >
+                  <OccasionSelector 
+                    selectedOccasion={occasion} 
+                    onOccasionSelect={setOccasion} 
+                  />
+                </CardCreationStep>
+
+                {/* Step 2: Vibe */}
+                <CardCreationStep
+                  title="Choose a Vibe"
+                  subtitle="Select the emotional tone for your card"
+                  stepNumber={2}
+                  totalSteps={3}
+                >
+                  <VibeSelector selectedVibe={vibe} onVibeSelect={setVibe} occasion={occasion} />
+                </CardCreationStep>
+
+                {/* Step 3: Message */}
+                <CardCreationStep
+                  title="Write Your Message"
+                  subtitle="Share what's on your heart"
+                  stepNumber={3}
+                  totalSteps={3}
+                >
+                  <MessageInput message={message} onMessageChange={setMessage} />
+                </CardCreationStep>
+
+                {/* Generate button */}
+                <div className="pt-2">
+                  <button
+                    onClick={handleGenerate}
+                    disabled={!canGenerate}
+                    className={`w-full rounded-lg px-6 py-4 text-lg font-semibold text-white transition-all ${
+                      canGenerate
+                        ? 'active:scale-[0.98]'
+                        : 'cursor-not-allowed bg-gray-400'
+                    }`}
+                    style={canGenerate ? {
+                      backgroundColor: primaryColor,
+                    } : {}}
+                    onMouseEnter={(e) => {
+                      if (canGenerate) {
+                        e.currentTarget.style.backgroundColor = primaryHoverColor;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (canGenerate) {
+                        e.currentTarget.style.backgroundColor = primaryColor;
+                      }
+                    }}
+                  >
+                    Generate Card
+                  </button>
+                </div>
+
+                {/* Success message */}
+                {success && (
+                  <SuccessMessage
+                    message={success}
+                    onDismiss={() => setSuccess(null)}
+                  />
+                )}
+
+                {/* Error message */}
+                {error && (
+                  <ErrorMessage
+                    message={error}
+                    onDismiss={() => setError(null)}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Card Preview */}
+          {card && !isGenerating && (
+            <div id="card-preview" className="mt-8">
+              <CardPreview card={card} onCardChange={setCard} />
+            </div>
+          )}
         </div>
       </main>
     </div>

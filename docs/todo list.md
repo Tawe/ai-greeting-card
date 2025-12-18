@@ -2,151 +2,151 @@
 
 ## Project Setup & Infrastructure
 
-- [ ] Initialize Next.js project with App Router
-- [ ] Set up project structure (components, lib, app directories)
-- [ ] Configure environment variables (.env.local)
-- [ ] Set up database (Postgres/Supabase/SQLite)
+- [x] Initialize Next.js project with App Router
+- [x] Set up project structure (components, lib, app directories)
+- [x] Configure environment variables (.env.local)
+- [x] Set up database (Postgres/Supabase/SQLite)
 - [ ] Set up S3-compatible storage (R2/S3) for images
 - [ ] Configure Redis/KV for rate limiting
 - [ ] Set up cron job infrastructure for daily cleanup
-- [ ] Configure TypeScript and ESLint
+- [x] Configure TypeScript and ESLint
 
 ## Database & Data Models
 
-- [ ] Create `occasions` table schema
-  - [ ] id, name, is_active, style_guide (JSON), font_set (array), created_at
-- [ ] Create `cards` table schema
-  - [ ] id, slug, occasion_id, vibe, clean_message, cover_image_url, theme_version, created_at, expires_at, creator_hash, status
-- [ ] Set up database migrations
-- [ ] Seed initial data: Christmas occasion (is_active=true)
-- [ ] Create database indexes for performance (slug, expires_at, creator_hash)
+- [x] Create `occasions` table schema
+  - [x] id, name, is_active, style_guide (JSON), font_set (array), created_at
+- [x] Create `cards` table schema
+  - [x] id, slug, occasion_id, vibe, clean_message, cover_image_url, theme_version, created_at, expires_at, creator_hash, status
+- [x] Set up database migrations
+- [x] Seed initial data: Christmas occasion (is_active=true)
+- [x] Create database indexes for performance (slug, expires_at, creator_hash)
 
 ## Frontend - Homepage & Card Creation
 
-- [ ] Create homepage layout
-- [ ] Build occasion selector component (locked to Christmas in v0.1)
-- [ ] Build vibe selector component (Warm, Funny, Fancy, Chaotic)
-- [ ] Create message input component
-- [ ] Build Generate button with loading states
-- [ ] Create card preview component (outside cover + inside message)
-- [ ] Add regenerate cover button
-- [ ] Add regenerate message button
-- [ ] Build publish card functionality
-- [ ] Add error handling and user feedback messages
+- [x] Create homepage layout
+- [x] Build occasion selector component (locked to Christmas in v0.1)
+- [x] Build vibe selector component (Warm, Funny, Fancy, Chaotic)
+- [x] Create message input component
+- [x] Build Generate button with loading states
+- [x] Create card preview component (outside cover + inside message)
+- [x] Add regenerate cover button
+- [x] Add regenerate message button
+- [x] Build publish card functionality
+- [x] Add error handling and user feedback messages
 
 ## Frontend - Card Viewing
 
-- [ ] Create card viewing page route `/c/[occasion]/[slug]`
-- [ ] Build card cover display (outside)
-- [ ] Implement card opening animation/interaction
-- [ ] Display inside message with vibe-appropriate font
-- [ ] Add share buttons (LinkedIn, Twitter, Facebook, etc.)
-- [ ] Handle expired cards gracefully
-- [ ] Add 404 handling for non-existent cards
+- [x] Create card viewing page route `/c/[occasion]/[slug]`
+- [x] Build card cover display (outside)
+- [x] Implement card opening animation/interaction
+- [x] Display inside message with vibe-appropriate font
+- [x] Add share buttons (LinkedIn, Twitter, Facebook, etc.)
+- [x] Handle expired cards gracefully
+- [x] Add 404 handling for non-existent cards
 
 ## API Endpoints
 
-- [ ] Implement `POST /api/cards`
-  - [ ] Validate input (occasion, vibe, message)
-  - [ ] Check rate limits
-  - [ ] Pre-process message (content moderation)
-  - [ ] Call AI for message rewrite
-  - [ ] Call AI for cover image generation
-  - [ ] Upload image to S3/R2
-  - [ ] Generate slug
-  - [ ] Save card to database
-  - [ ] Return card data
-- [ ] Implement `POST /api/cards/{id}/regenerate-cover`
-  - [ ] Validate card exists and is not published
-  - [ ] Generate new cover image
-  - [ ] Upload new image
-  - [ ] Update database
-- [ ] Implement `POST /api/cards/{id}/regenerate-message`
-  - [ ] Validate card exists and is not published
-  - [ ] Regenerate message rewrite
-  - [ ] Update database
-- [ ] Implement `POST /api/cards/{id}/publish`
-  - [ ] Mark card as published
-  - [ ] Return deep link URL
-- [ ] Implement `GET /c/{occasion}/{slug}` (SSR)
-  - [ ] Fetch card from database
-  - [ ] Check expiration
-  - [ ] Generate Open Graph metadata
-  - [ ] Render card view page
+- [x] Implement `POST /api/cards`
+  - [x] Validate input (occasion, vibe, message)
+  - [x] Check rate limits
+  - [x] Pre-process message (content moderation)
+  - [x] Call AI for message rewrite
+  - [x] Call AI for cover image generation
+  - [x] Upload image to S3/R2
+  - [x] Generate slug
+  - [x] Save card to database
+  - [x] Return card data
+- [x] Implement `POST /api/cards/{id}/regenerate-cover`
+  - [x] Validate card exists and is not published
+  - [x] Generate new cover image
+  - [x] Upload new image
+  - [x] Update database
+- [x] Implement `POST /api/cards/{id}/regenerate-message`
+  - [x] Validate card exists and is not published
+  - [x] Regenerate message rewrite
+  - [x] Update database
+- [x] Implement `POST /api/cards/{id}/publish`
+  - [x] Mark card as published
+  - [x] Return deep link URL
+- [x] Implement `GET /c/{occasion}/{slug}` (SSR)
+  - [x] Fetch card from database
+  - [x] Check expiration
+  - [x] Generate Open Graph metadata
+  - [x] Render card view page
 
 ## AI Integration (Google Gemini)
 
-- [ ] Set up Google Gemini API client
-- [ ] Implement message rewrite function
-  - [ ] Preserve user intent
-  - [ ] Improve clarity and grammar
-  - [ ] Match vibe and occasion tone
-  - [ ] Filter unsafe content
-  - [ ] Return plain text only
-- [ ] Implement cover image generation function
-  - [ ] Generate imagery aligned with occasion + vibe
-  - [ ] Use clean composition and negative space
-  - [ ] Avoid embedded text
-- [ ] Create prompt templates for different vibes
-- [ ] Add error handling for AI API failures
-- [ ] Implement retry logic for transient failures
+- [x] Set up Google Gemini API client
+- [x] Implement message rewrite function
+  - [x] Preserve user intent
+  - [x] Improve clarity and grammar
+  - [x] Match vibe and occasion tone
+  - [x] Filter unsafe content
+  - [x] Return plain text only
+- [x] Implement cover image generation function
+  - [x] Generate imagery aligned with occasion + vibe
+  - [x] Use clean composition and negative space
+  - [x] Avoid embedded text
+- [x] Create prompt templates for different vibes
+- [x] Add error handling for AI API failures
+- [x] Implement retry logic for transient failures
 
 ## Font Selection & Styling
 
-- [ ] Define font set for each vibe
-  - [ ] Warm vibe font
-  - [ ] Funny vibe font
-  - [ ] Fancy vibe font
-  - [ ] Chaotic vibe font
-- [ ] Create deterministic font mapping function
-- [ ] Implement font loading and fallbacks
-- [ ] Style card inside message with selected font
+- [x] Define font set for each vibe
+  - [x] Warm vibe font
+  - [x] Funny vibe font
+  - [x] Fancy vibe font
+  - [x] Chaotic vibe font
+- [x] Create deterministic font mapping function
+- [x] Implement font loading and fallbacks
+- [x] Style card inside message with selected font
 
 ## Rate Limiting
 
-- [ ] Implement IP-based rate limiting (10 cards per IP per 24 hours)
-- [ ] Implement device identifier tracking (cookie/localStorage)
-- [ ] Implement device-based rate limiting (3 cards per device per 24 hours)
-- [ ] Create rate limit middleware for API routes
+- [x] Implement IP-based rate limiting (10 cards per IP per 24 hours)
+- [x] Implement device identifier tracking (cookie/localStorage)
+- [x] Implement device-based rate limiting (3 cards per device per 24 hours)
+- [x] Create rate limit middleware for API routes
 - [ ] Add CAPTCHA integration after threshold
-- [ ] Return appropriate error messages when limits exceeded
+- [x] Return appropriate error messages when limits exceeded
 
 ## Content Moderation
 
-- [ ] Implement pre-processing function
-  - [ ] Remove emails, phone numbers, addresses
-  - [ ] Block hate speech, harassment, threats
-  - [ ] Block defamatory statements about private individuals
-- [ ] Add content moderation checks to AI prompts
-- [ ] Create user-friendly error messages for blocked content
-- [ ] Handle public figure mentions appropriately
-- [ ] Block criminal accusations and personal data
+- [x] Implement pre-processing function
+  - [x] Remove emails, phone numbers, addresses
+  - [x] Block hate speech, harassment, threats
+  - [x] Block defamatory statements about private individuals
+- [x] Add content moderation checks to AI prompts
+- [x] Create user-friendly error messages for blocked content
+- [x] Handle public figure mentions appropriately
+- [x] Block criminal accusations and personal data
 
 ## Social Sharing & Deep Links
 
-- [ ] Generate unique slugs for cards
-- [ ] Create deep link format: `/c/{occasion}/{slug}`
-- [ ] Implement share button components
-- [ ] Generate platform-specific share URLs
-- [ ] Add query params for attribution (e.g., `?src=linkedin`)
-- [ ] Generate Open Graph metadata
-  - [ ] og:image (cover image)
-  - [ ] og:title ("A {vibe} holiday card")
-  - [ ] og:description
-- [ ] Generate Twitter Card metadata
-- [ ] Test social preview rendering
+- [x] Generate unique slugs for cards
+- [x] Create deep link format: `/c/{occasion}/{slug}`
+- [x] Implement share button components
+- [x] Generate platform-specific share URLs
+- [x] Add query params for attribution (e.g., `?src=linkedin`)
+- [x] Generate Open Graph metadata
+  - [x] og:image (cover image)
+  - [x] og:title ("A {vibe} holiday card")
+  - [x] og:description
+- [x] Generate Twitter Card metadata
+- [x] Test social preview rendering
 
 ## Data Retention & Cleanup
 
-- [ ] Set expires_at timestamp on card creation (30 days)
-- [ ] Create scheduled cleanup job (daily cron)
-- [ ] Implement cleanup logic:
-  - [ ] Find expired cards
-  - [ ] Delete database records
-  - [ ] Delete stored images from S3/R2
-  - [ ] Delete any derived assets
-- [ ] Add logging for cleanup operations
-- [ ] Handle cleanup failures gracefully
+- [x] Set expires_at timestamp on card creation (30 days)
+- [x] Create scheduled cleanup job (daily cron)
+- [x] Implement cleanup logic:
+  - [x] Find expired cards
+  - [x] Delete database records
+  - [x] Delete stored images from S3/R2
+  - [x] Delete any derived assets
+- [x] Add logging for cleanup operations
+- [x] Handle cleanup failures gracefully
 
 ## Testing
 
@@ -183,9 +183,9 @@
 
 ## Documentation
 
-- [ ] Write API documentation
-- [ ] Document environment variables
-- [ ] Create deployment guide
-- [ ] Document how to add new holidays
-- [ ] Document how to add new vibes
-- [ ] Create README with setup instructions
+- [x] Write API documentation
+- [x] Document environment variables
+- [x] Create deployment guide
+- [x] Document how to add new holidays
+- [x] Document how to add new vibes
+- [x] Create README with setup instructions

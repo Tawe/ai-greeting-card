@@ -10,9 +10,12 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL environment variable is required. Please set it in .env.local');
 }
 
+// Type assertion: we've checked above that databaseUrl exists
+const dbUrl: string = databaseUrl;
+
 // Validate URL format
 try {
-  new URL(databaseUrl);
+  new URL(dbUrl);
 } catch (error) {
   console.error('❌ Invalid DATABASE_URL format. Make sure the password is URL-encoded.');
   console.error('   Special characters in password (like /, %, @) must be encoded.');
@@ -25,6 +28,6 @@ export default {
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
-    url: databaseUrl,
+    url: dbUrl,
   },
 } satisfies Config;

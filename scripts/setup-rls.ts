@@ -20,8 +20,11 @@ if (!databaseUrl) {
   process.exit(1);
 }
 
+// Type assertion: we've checked above that databaseUrl exists
+const dbUrl: string = databaseUrl;
+
 async function setupRLS() {
-  const sql = postgres(databaseUrl, { prepare: false, max: 1 });
+  const sql = postgres(dbUrl, { prepare: false, max: 1 });
 
   try {
     console.log('🔒 Setting up Row Level Security policies...\n');

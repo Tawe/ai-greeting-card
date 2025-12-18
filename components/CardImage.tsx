@@ -9,6 +9,7 @@ interface CardImageProps {
   fill?: boolean;
   className?: string;
   priority?: boolean;
+  sizes?: string;
 }
 
 /**
@@ -16,7 +17,7 @@ interface CardImageProps {
  * Uses regular img tag for localhost (to avoid Next.js Image private IP blocking)
  * Uses Next.js Image for production URLs (for optimization)
  */
-export default function CardImage({ src, alt, fill, className, priority }: CardImageProps) {
+export default function CardImage({ src, alt, fill, className, priority, sizes }: CardImageProps) {
   const [error, setError] = useState(false);
   
   // Check if URL is localhost (development)
@@ -54,6 +55,7 @@ export default function CardImage({ src, alt, fill, className, priority }: CardI
         fill
         className={className}
         priority={priority}
+        sizes={sizes}
         onError={() => setError(true)}
       />
     );
@@ -67,6 +69,7 @@ export default function CardImage({ src, alt, fill, className, priority }: CardI
       width={800}
       height={600}
       priority={priority}
+      sizes={sizes}
       onError={() => setError(true)}
     />
   );

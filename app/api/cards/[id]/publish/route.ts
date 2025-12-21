@@ -26,8 +26,13 @@ export async function POST(
       .set({ status: 'published' })
       .where(eq(cards.id, id));
 
-    // Generate deep link
-    const deepLink = `${config.app.url}/c/${card[0].occasionId}/${card[0].slug}`;
+    // Generate deep link - use request origin/host to get the correct production URL
+    const origin = request.headers.get('origin') || 
+                  request.headers.get('x-forwarded-host') ? 
+                    `https://${request.headers.get('x-forwarded-host')}` : 
+                    (request.headers.get('host') ? `https://${request.headers.get('host')}` : null);
+    const baseUrl = origin || config.app.url;
+    const deepLink = `${baseUrl}/c/${card[0].occasionId}/${card[0].slug}`;
 
     return NextResponse.json({
       id: card[0].id,

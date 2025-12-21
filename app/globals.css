@@ -225,23 +225,11 @@ body {
   /* Keep cover visible during animation - backface-visibility will hide it when rotated */
 }
 
-/* Use animation to show back after card opening animation completes */
-@keyframes showCardBack {
-  0%, 99% {
-    opacity: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-  100% {
-    opacity: 1;
-    z-index: 5;
-    pointer-events: auto;
-  }
-}
-
+/* When card is open, show the back immediately (it's behind the cover during animation) */
 .card-inner.opened .card-back {
-  /* Keep hidden during the 0.8s card opening animation, then show */
-  animation: showCardBack 0.9s forwards;
+  z-index: 5;
+  pointer-events: auto;
+  opacity: 1;
 }
 
 .card-back {
@@ -252,10 +240,12 @@ body {
   height: 100%;
   border-radius: 16px;
   overflow: hidden;
-  /* Default state - hidden when closed */
-  opacity: 0;
+  /* Always visible, just behind the cover when closed */
+  opacity: 1;
   z-index: 0;
   pointer-events: none;
+  /* No transitions - should appear instantly */
+  transition: none;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

@@ -96,10 +96,20 @@ export async function POST(request: NextRequest) {
     let coverImageUrl = '/placeholder-cover.jpg';
     try {
       const imageBuffer = await generateCoverImage(vibe, occasion);
+      console.log(`✅ Image generated, size: ${imageBuffer.length} bytes`);
+      
       const imageKey = generateImageKey(cardId);
+      console.log(`📤 Uploading image to S3: ${imageKey}`);
+      
       coverImageUrl = await uploadImage(imageBuffer, imageKey, 'image/png');
+      console.log(`✅ Image uploaded successfully: ${coverImageUrl}`);
     } catch (error) {
-      console.error('Error generating/uploading cover image:', error);
+      console.error('❌ Error generating/uploading cover image:', error);
+      if (error instanceof Error) {
+        console.error('   Error name:', error.name);
+        console.error('   Error message:', error.message);
+        console.error('   Error stack:', error.stack);
+      }
       // For MVP, continue with placeholder if image generation fails
       // In production, you might want to fail the request or retry
     }

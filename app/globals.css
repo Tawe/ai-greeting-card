@@ -171,12 +171,14 @@ body {
     0 30px 60px rgba(0, 0, 0, 0.18),
     0 10px 20px rgba(0, 0, 0, 0.08);
   background: transparent;
+  /* Hide when rotated (backface-visibility on child handles this) */
 }
 
 .card-inner.opened .card-cover-container {
   transform: rotateY(-160deg);
-  /* Keep cover on top during entire animation - backface-visibility hides it when rotated */
-  z-index: 10;
+  /* Cover rotates away - lower z-index so back is visible above it */
+  z-index: 1;
+  /* backface-visibility on child makes cover invisible when rotated */
 }
 
 /* Outside cover - the front with image */
@@ -193,7 +195,7 @@ body {
   transform-origin: left center;
 }
 
-/* Card back - hidden until animation completes */
+/* Card back - always present, controlled by z-index */
 .card-back {
   position: absolute;
   top: 0;
@@ -205,17 +207,19 @@ body {
   z-index: 1;
   pointer-events: none;
   opacity: 1;
-  /* Hide during animation to prevent flash */
-  visibility: hidden;
+  visibility: visible;
 }
 
-/* When card is open, show back after animation completes */
+/* When card is closed, keep back behind cover */
+.card-inner:not(.opened) .card-back {
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* When card is open, show back (cover rotates away due to backface-visibility) */
 .card-inner.opened .card-back {
-  visibility: visible;
-  pointer-events: auto;
-  /* Delay showing until animation completes (0.8s) */
-  transition: visibility 0s 0.8s, pointer-events 0s 0.8s;
   z-index: 5;
+  pointer-events: auto;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

@@ -100,16 +100,30 @@ body {
   perspective: 1500px;
   perspective-origin: center center;
   width: 100%;
-  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .card-container {
+    padding: 1.5rem;
+  }
 }
 
 /* Card stage - soft surface behind the card */
 .card-stage {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 24px;
-  padding: 2rem;
+  padding: 1rem;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 640px) {
+  .card-stage {
+    padding: 1.5rem;
+  }
 }
 
 .card-inner {
@@ -139,8 +153,17 @@ body {
   transform-origin: left center;
   transition: transform 0.8s ease-in-out, box-shadow 0.3s ease-in-out;
   z-index: 10;
-  min-height: 300px;
+  min-height: 200px;
+  max-height: 450px;
   border-radius: 16px;
+}
+
+@media (min-width: 640px) {
+  .card-cover-container {
+    min-height: 250px;
+    max-height: 500px;
+  }
+}
   /* Hero shadow - makes card feel precious and liftable */
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.18),

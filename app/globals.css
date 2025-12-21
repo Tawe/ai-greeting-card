@@ -233,20 +233,31 @@ body {
   pointer-events: none;
 }
 
-/* When card is open, keep cover on top during entire animation */
+/* When card is open, keep cover on top during entire animation (0.8s) */
 .card-inner.opened .card-cover-container {
-  z-index: 10;
+  z-index: 15;
 }
 
 .card-inner.opened .card-cover-outside {
-  z-index: 10;
+  z-index: 15;
   /* Keep cover visible during animation - backface-visibility will hide it when rotated */
 }
 
-/* When card is open, back is visible (cover rotates away) */
+/* Animation to delay showing card back until cover animation completes */
+@keyframes showCardBackDelayed {
+  0%, 99.9% {
+    z-index: 0;
+    pointer-events: none;
+  }
+  100% {
+    z-index: 10;
+    pointer-events: auto;
+  }
+}
+
+/* When card is open, keep back hidden during animation, then show after delay */
 .card-inner.opened .card-back {
-  z-index: 5;
-  pointer-events: auto;
+  animation: showCardBackDelayed 0.9s forwards;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

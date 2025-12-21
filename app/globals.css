@@ -129,8 +129,18 @@ body {
 .card-inner {
   position: relative;
   width: 100%;
+  aspect-ratio: 4 / 3;
   transform-style: preserve-3d;
   animation: cardSettle 0.6s ease-out;
+  min-height: 200px;
+  max-height: 450px;
+}
+
+@media (min-width: 640px) {
+  .card-inner {
+    min-height: 250px;
+    max-height: 500px;
+  }
 }
 
 @keyframes cardSettle {
@@ -144,31 +154,23 @@ body {
   }
 }
 
-/* Cover container - holds both outside and inside covers, animates together */
+/* Cover container - rotates to reveal the back */
 .card-cover-container {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   transform-style: preserve-3d;
   transform-origin: left center;
-  transition: transform 0.8s ease-in-out, box-shadow 0.3s ease-in-out;
-  z-index: 10;
-  min-height: 200px;
-  max-height: 450px;
+  transition: transform 0.8s ease-in-out;
+  z-index: 2;
   border-radius: 16px;
-  /* Hero shadow - makes card feel precious and liftable */
+  /* Hero shadow */
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.18),
     0 10px 20px rgba(0, 0, 0, 0.08);
-  /* No background - let the cover image show through */
   background: transparent;
-}
-
-@media (min-width: 640px) {
-  .card-cover-container {
-    min-height: 250px;
-    max-height: 500px;
-  }
 }
 
 .card-inner:not(.opened) .card-cover-container:hover {
@@ -193,23 +195,14 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 16px;
   overflow: hidden;
   transform-origin: left center;
-  transform: rotateY(0deg);
-  /* Ensure it stays visible during animation */
-  will-change: transform;
 }
 
-/* When card is closed, ensure outside cover is visible and on top */
-.card-inner:not(.opened) .card-cover-outside {
-  z-index: 10;
-}
-
-/* Card back - always visible, controlled by z-index only */
+/* Card back - always behind the cover */
 .card-back {
   position: absolute;
   top: 0;
@@ -218,46 +211,14 @@ body {
   height: 100%;
   border-radius: 16px;
   overflow: hidden;
-  /* Always fully opaque - no opacity changes */
-  opacity: 1 !important;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
-  /* No transitions or animations */
-  transition: none !important;
-  animation: none !important;
+  opacity: 1;
 }
 
-/* When card is closed, keep back behind cover */
-.card-inner:not(.opened) .card-back {
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* When card is open, keep cover on top during entire animation (0.8s) */
-.card-inner.opened .card-cover-container {
-  z-index: 15;
-}
-
-.card-inner.opened .card-cover-outside {
-  z-index: 15;
-  /* Keep cover visible during animation - backface-visibility will hide it when rotated */
-}
-
-/* Animation to delay showing card back until cover animation completes */
-@keyframes showCardBackDelayed {
-  0%, 99.9% {
-    z-index: 0;
-    pointer-events: none;
-  }
-  100% {
-    z-index: 10;
-    pointer-events: auto;
-  }
-}
-
-/* When card is open, keep back hidden during animation, then show after delay */
+/* When card is open, back becomes interactive */
 .card-inner.opened .card-back {
-  animation: showCardBackDelayed 0.9s forwards;
+  pointer-events: auto;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

@@ -156,6 +156,12 @@ body {
   min-height: 200px;
   max-height: 450px;
   border-radius: 16px;
+  /* Hero shadow - makes card feel precious and liftable */
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.18),
+    0 10px 20px rgba(0, 0, 0, 0.08);
+  /* No background - let the cover image show through */
+  background: transparent;
 }
 
 @media (min-width: 640px) {
@@ -163,13 +169,6 @@ body {
     min-height: 250px;
     max-height: 500px;
   }
-}
-  /* Hero shadow - makes card feel precious and liftable */
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.18),
-    0 10px 20px rgba(0, 0, 0, 0.08);
-  /* No background - let the cover image show through */
-  background: transparent;
 }
 
 .card-inner:not(.opened) .card-cover-container:hover {

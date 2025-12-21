@@ -209,10 +209,28 @@ body {
   z-index: 10;
 }
 
+/* Card back - always visible, controlled by z-index only */
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  /* Always fully opaque - no opacity changes */
+  opacity: 1 !important;
+  z-index: 0;
+  pointer-events: none;
+  /* No transitions or animations */
+  transition: none !important;
+  animation: none !important;
+}
+
+/* When card is closed, keep back behind cover */
 .card-inner:not(.opened) .card-back {
   z-index: 0;
   pointer-events: none;
-  opacity: 0;
 }
 
 /* When card is open, keep cover on top during entire animation */
@@ -225,27 +243,10 @@ body {
   /* Keep cover visible during animation - backface-visibility will hide it when rotated */
 }
 
-/* When card is open, show the back immediately (it's behind the cover during animation) */
+/* When card is open, back is visible (cover rotates away) */
 .card-inner.opened .card-back {
   z-index: 5;
   pointer-events: auto;
-  opacity: 1;
-}
-
-.card-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  /* Always visible, just behind the cover when closed */
-  opacity: 1;
-  z-index: 0;
-  pointer-events: none;
-  /* No transitions - should appear instantly */
-  transition: none;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

@@ -176,8 +176,10 @@ body {
 
 .card-inner.opened .card-cover-container {
   transform: rotateY(-160deg);
-  /* Cover stays on top during animation - backface-visibility hides it when rotated */
-  z-index: 10;
+  /* Cover rotates away - backface-visibility makes it invisible when rotated */
+  /* Lower z-index so back is visible above it */
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Outside cover - the front with image */
@@ -194,7 +196,7 @@ body {
   transform-origin: left center;
 }
 
-/* Card back - hidden during animation to prevent flash */
+/* Card back - always visible, no transitions or delays */
 .card-back {
   position: absolute;
   top: 0;
@@ -203,25 +205,25 @@ body {
   height: 100%;
   border-radius: 16px;
   overflow: hidden;
-  z-index: 5;
+  z-index: 1;
   pointer-events: none;
   opacity: 1;
-  /* Hide during animation, show after 0.8s */
-  visibility: hidden;
-  transition: visibility 0s 0.8s;
+  visibility: visible;
+  /* No transitions or animations */
+  transition: none !important;
+  animation: none !important;
 }
 
-/* When card is closed, keep back hidden */
+/* When card is closed, back is behind cover */
 .card-inner:not(.opened) .card-back {
-  visibility: hidden;
+  z-index: 1;
   pointer-events: none;
 }
 
-/* When card is open, show back after animation completes */
+/* When card is open, back is visible and interactive */
 .card-inner.opened .card-back {
-  visibility: visible;
+  z-index: 5;
   pointer-events: auto;
-  transition: visibility 0s 0.8s;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

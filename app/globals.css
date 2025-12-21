@@ -171,13 +171,11 @@ body {
     0 30px 60px rgba(0, 0, 0, 0.18),
     0 10px 20px rgba(0, 0, 0, 0.08);
   background: transparent;
-  /* Hide when rotated (backface-visibility on child handles this) */
 }
 
 .card-inner.opened .card-cover-container {
   transform: rotateY(-160deg);
-  /* Cover rotates away - backface-visibility on child makes it invisible when rotated */
-  /* Keep z-index high so it doesn't interfere, but backface-visibility handles visibility */
+  /* Cover rotates away - keep on top during animation to prevent flash */
   z-index: 10;
   pointer-events: none;
 }
@@ -194,6 +192,14 @@ body {
   border-radius: 16px;
   overflow: hidden;
   transform-origin: left center;
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+
+/* Hide cover image immediately when card opens to prevent flash */
+.card-inner.opened .card-cover-outside {
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
 }
 
 /* Card back - starts hidden, fades in after open */

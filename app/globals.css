@@ -174,22 +174,11 @@ body {
   /* Hide when rotated (backface-visibility on child handles this) */
 }
 
-/* Animation to delay z-index change until after rotation completes */
-@keyframes delayZIndexChange {
-  0%, 99.9% {
-    z-index: 10;
-  }
-  100% {
-    z-index: 1;
-  }
-}
-
 .card-inner.opened .card-cover-container {
   transform: rotateY(-160deg);
-  /* Keep cover on top during animation (0.8s) to prevent text flash */
-  /* After animation, lower z-index so back is visible */
-  animation: delayZIndexChange 0.9s forwards;
-  transition: transform 0.8s ease-in-out;
+  /* Cover rotates away - backface-visibility on child makes it invisible when rotated */
+  /* Keep z-index high so it doesn't interfere, but backface-visibility handles visibility */
+  z-index: 10;
   pointer-events: none;
 }
 

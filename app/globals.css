@@ -164,7 +164,7 @@ body {
   transform-style: preserve-3d;
   transform-origin: left center;
   transition: transform 0.8s ease-in-out;
-  z-index: 2;
+  z-index: 10;
   border-radius: 16px;
   /* Hero shadow */
   box-shadow:
@@ -175,6 +175,8 @@ body {
 
 .card-inner.opened .card-cover-container {
   transform: rotateY(-160deg);
+  /* Keep cover on top during entire animation - backface-visibility hides it when rotated */
+  z-index: 10;
 }
 
 /* Outside cover - the front with image */
@@ -191,7 +193,7 @@ body {
   transform-origin: left center;
 }
 
-/* Card back - always behind the cover */
+/* Card back - hidden until animation completes */
 .card-back {
   position: absolute;
   top: 0;
@@ -203,11 +205,17 @@ body {
   z-index: 1;
   pointer-events: none;
   opacity: 1;
+  /* Hide during animation to prevent flash */
+  visibility: hidden;
 }
 
-/* When card is open, back becomes interactive */
+/* When card is open, show back after animation completes */
 .card-inner.opened .card-back {
+  visibility: visible;
   pointer-events: auto;
+  /* Delay showing until animation completes (0.8s) */
+  transition: visibility 0s 0.8s, pointer-events 0s 0.8s;
+  z-index: 5;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

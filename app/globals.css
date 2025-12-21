@@ -196,7 +196,7 @@ body {
   transform-origin: left center;
 }
 
-/* Card back - always visible, no transitions or delays */
+/* Card back - starts hidden, fades in after open */
 .card-back {
   position: absolute;
   top: 0;
@@ -207,23 +207,23 @@ body {
   overflow: hidden;
   z-index: 1;
   pointer-events: none;
-  opacity: 1;
+  opacity: 0;
   visibility: visible;
-  /* No transitions or animations */
-  transition: none !important;
-  animation: none !important;
 }
 
 /* When card is closed, back is behind cover */
 .card-inner:not(.opened) .card-back {
   z-index: 1;
   pointer-events: none;
+  opacity: 0;
 }
 
-/* When card is open, back is visible and interactive */
+/* When card is open, back fades in after 150ms delay */
 .card-inner.opened .card-back {
   z-index: 5;
   pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.3s ease-in 0.15s;
 }
 
 /* Card stock background - slightly off-white for better text contrast */

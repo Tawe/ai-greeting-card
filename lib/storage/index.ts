@@ -37,7 +37,8 @@ export async function uploadImage(
     Body: buffer,
     ContentType: contentType,
     CacheControl: 'public, max-age=31536000', // 1 year cache
-    ACL: 'public-read', // Make objects publicly readable
+    // Note: ACL is not included because bucket has "Bucket owner enforced" ownership
+    // Public access is controlled via bucket policy instead
   });
 
   try {

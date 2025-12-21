@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Generate cover image
-    let coverImageUrl = '/placeholder-cover.jpg';
+    let coverImageUrl: string;
     try {
       const imageBuffer = await generateCoverImage(vibe, occasion);
       console.log(`✅ Image generated, size: ${imageBuffer.length} bytes`);
@@ -109,9 +109,44 @@ export async function POST(request: NextRequest) {
         console.error('   Error name:', error.name);
         console.error('   Error message:', error.message);
         console.error('   Error stack:', error.stack);
+        
+        // Provide user-friendly error messages
+        if (error.message.includes('STORAGE_BUCKET_NAME') || error.message.includes('Storage credentials')) {
+          return NextResponse.json(
+            { 
+              error: 'Storage configuration error',
+              message: 'Image storage is not properly configured. Please contact support.',
+            },
+            { status: 500 }
+          );
+        }
+        if (error.message.includes('AccessDenied') || error.message.includes('403')) {
+          return NextResponse.json(
+            { 
+              error: 'Storage access denied',
+              message: 'Unable to upload image. Please check storage permissions.',
+            },
+            { status: 500 }
+          );
+        }
+        if (error.message.includes('GEMINI_API_KEY')) {
+          return NextResponse.json(
+            { 
+              error: 'AI service configuration error',
+              message: 'Image generation service is not properly configured.',
+            },
+            { status: 500 }
+          );
+        }
       }
-      // For MVP, continue with placeholder if image generation fails
-      // In production, you might want to fail the request or retry
+      // For other errors, return generic error
+      return NextResponse.json(
+        { 
+          error: 'Failed to generate card image',
+          message: 'Unable to create card cover image. Please try again.',
+        },
+        { status: 500 }
+      );
     }
 
     // Generate slug

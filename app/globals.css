@@ -100,7 +100,7 @@ body {
   perspective: 1500px;
   perspective-origin: center center;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -132,14 +132,14 @@ body {
   aspect-ratio: 4 / 3;
   transform-style: preserve-3d;
   animation: cardSettle 0.6s ease-out;
-  min-height: 200px;
-  max-height: 450px;
+  min-height: 240px;
+  max-height: 540px;
 }
 
 @media (min-width: 640px) {
   .card-inner {
-    min-height: 250px;
-    max-height: 500px;
+    min-height: 300px;
+    max-height: 600px;
   }
 }
 
@@ -198,7 +198,6 @@ body {
 
 /* Hide cover image immediately when card opens to prevent flash */
 .card-inner.opened .card-cover-outside {
-  opacity: 0;
   transition: opacity 0.1s ease-out;
 }
 
@@ -221,7 +220,7 @@ body {
 .card-inner:not(.opened) .card-back {
   z-index: 1;
   pointer-events: none;
-  opacity: 0;
+  transition: opacity 0.3s ease-in 0.55s;
 }
 
 /* When card is open, back fades in after 150ms delay */

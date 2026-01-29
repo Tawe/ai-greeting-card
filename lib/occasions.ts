@@ -33,6 +33,32 @@ export const occasionStyles: Record<string, OccasionStyle> = {
     text: '#171717', // Dark text
     accent: '#006B3C', // Pine green for subtle accents
   },
+  'valentines-day': {
+    id: 'valentines-day',
+    name: "Valentine's Day",
+    colorPalette: ['#D72638', '#F9C5D5', '#FFF5F7', '#8E4162'],
+    // Soft romantic rose gradient, low contrast
+    gradient: 'linear-gradient(135deg, #fff5f7 0%, #fde7ef 30%, #fbe9f2 60%, #fff8f2 100%)',
+    primary: '#D72638', // Deep romantic red
+    primaryHover: '#B11F2E', // Darker red for hover
+    secondary: '#8E4162', // Plum accent
+    border: '#D72638', // Red borders
+    text: '#171717', // Dark text
+    accent: '#F472B6', // Soft pink accent
+  },
+  easter: {
+    id: 'easter',
+    name: 'Easter',
+    colorPalette: ['#FDE6F2', '#E3F4FE', '#FFF9D6', '#E5F8E0'],
+    // Pastel spring gradient: soft yellows, blues, and pinks
+    gradient: 'linear-gradient(135deg, #fef9e7 0%, #f3f7ff 30%, #fef6fb 60%, #f7fdf3 100%)',
+    primary: '#E89BAA', // Soft rose
+    primaryHover: '#D37F91', // Slightly deeper rose
+    secondary: '#7CC4A8', // Mint green accent
+    border: '#E3B8D0', // Soft lilac border
+    text: '#171717', // Dark text
+    accent: '#7CC4A8', // Mint accent
+  },
   'new-year': {
     id: 'new-year',
     name: 'New Year',

@@ -16,6 +16,28 @@ export async function seedDatabase() {
       fontSet: ['Playfair Display', 'Dancing Script', 'Montserrat', 'Pacifico'],
     },
     {
+      id: 'valentines-day',
+      name: "Valentine's Day",
+      isActive: true,
+      styleGuide: {
+        colorPalette: ['#D72638', '#F9C5D5', '#FFF5F7', '#8E4162'],
+        motifs: ['hearts', 'roses', 'love letters', 'candles', 'chocolate'],
+        tone: 'romantic',
+      },
+      fontSet: ['Playfair Display', 'Dancing Script', 'Montserrat', 'Pacifico'],
+    },
+    {
+      id: 'easter',
+      name: 'Easter',
+      isActive: true,
+      styleGuide: {
+        colorPalette: ['#FDE6F2', '#E3F4FE', '#FFF9D6', '#E5F8E0'],
+        motifs: ['eggs', 'baskets', 'tulips', 'ribbons', 'spring meadow'],
+        tone: 'hopeful',
+      },
+      fontSet: ['Playfair Display', 'Dancing Script', 'Montserrat', 'Pacifico'],
+    },
+    {
       id: 'new-year',
       name: 'New Year',
       isActive: true,
